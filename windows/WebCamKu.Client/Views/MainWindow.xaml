@@ -1,20 +1,39 @@
 <Window x:Class="WebCamKu.Client.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="WebCamKu" Height="520" Width="760"
-        MinHeight="420" MinWidth="620"
+        Title="WebCamKu" Height="560" Width="760" MinHeight="480" MinWidth="640"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="32">
-        <Border Background="#111827" CornerRadius="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border Background="#111827" CornerRadius="12" Padding="24">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="WebCamKu" Foreground="White" FontSize="32"
-                           FontWeight="SemiBold" HorizontalAlignment="Center" />
-                <TextBlock Text="Windows client is ready"
-                           Foreground="#D1D5DB" FontSize="16" Margin="0,12,0,0" />
-                <TextBlock Text="Streaming will be added in a later milestone."
-                           Foreground="#9CA3AF" Margin="0,6,0,0" />
+                <TextBlock Text="Encoded H.264 receiver" Foreground="White" FontSize="28" FontWeight="SemiBold" />
+                <TextBlock Text="Decoding and preview begin in M0.5." Foreground="#9CA3AF" Margin="0,10,0,0" />
+                <TextBlock x:Name="StatisticsText" Text="Frames: 0 | Config: 0 | Bytes: 0"
+                           Foreground="#D1D5DB" FontSize="16" Margin="0,18,0,0" />
             </StackPanel>
         </Border>
+        <Grid Grid.Row="1" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="120" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Phone IP" VerticalAlignment="Center" Margin="0,0,8,0" />
+            <TextBox x:Name="HostTextBox" Grid.Column="1" Text="192.168.1.20" Padding="8" />
+            <TextBlock Grid.Column="2" Text="Port" VerticalAlignment="Center" Margin="16,0,8,0" />
+            <TextBox x:Name="PortTextBox" Grid.Column="3" Text="4747" Padding="8" />
+        </Grid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,16,0,0">
+            <Button x:Name="ConnectButton" Content="Connect" Width="110" Padding="8" Click="ConnectButton_Click" />
+            <Button x:Name="DisconnectButton" Content="Disconnect" Width="110" Padding="8" Margin="10,0,0,0"
+                    IsEnabled="False" Click="DisconnectButton_Click" />
+            <TextBlock x:Name="StatusText" Text="Disconnected" VerticalAlignment="Center" Margin="18,0,0,0" />
+        </StackPanel>
     </Grid>
 </Window>
-

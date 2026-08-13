@@ -16,5 +16,6 @@ WKC/1 uses a TCP byte stream. Every message consists of a fixed 24-byte header f
 
 Initial message types are `HELLO` (`0x01`), `HELLO_ACK` (`0x02`), `VIDEO_CONFIG` (`0x03`), `VIDEO_FRAME` (`0x04`), `COMMAND` (`0x05`), `COMMAND_ACK` (`0x06`), `PING` (`0x07`), `PONG` (`0x08`), `STATS` (`0x09`), `ERROR` (`0x0A`), `STREAM_START` (`0x0B`), and `STREAM_STOP` (`0x0C`).
 
-Control payloads are UTF-8 JSON. Encoded video is binary and must never be Base64-wrapped in JSON. Implementations must enforce a strict payload limit, reject invalid magic or unsupported versions, and correctly handle partial and concatenated TCP reads. Exact limits and flag values will be fixed when the parser is implemented in M0.2; incompatible semantic changes require WKC/2.
+Control payloads are UTF-8 JSON. Encoded video is binary and must never be Base64-wrapped in JSON. The maximum payload length is **16 MiB (16,777,216 bytes)**. Implementations must reject invalid magic, unsupported versions, unknown message types, invalid JSON, and excessive lengths, and must correctly handle partial and concatenated TCP reads.
 
+Flags use bits `0x0001` for `KEY_FRAME`, `0x0002` for `CONFIG`, and `0x0004` for `END_OF_STREAM`; all other bits are reserved and must be zero in WKC/1. Sequence numbers are unsigned 32-bit values assigned by each sender and incremented for every packet, wrapping after `0xFFFFFFFF`. Incompatible semantic changes require WKC/2.

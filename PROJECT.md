@@ -2137,34 +2137,34 @@ Do not begin USB/audio/advanced features until:
 
 ## M0.1 — Android camera
 
-- [ ] camera permission
-- [ ] CameraX preview
-- [ ] front/back camera
+- [x] camera permission
+- [x] CameraX preview
+- [x] front/back camera
 
 ## M0.2 — Protocol
 
-- [ ] WKC/1 header
-- [ ] parser
-- [ ] writer
-- [ ] HELLO
-- [ ] HELLO_ACK
-- [ ] PING/PONG
-- [ ] tests
+- [x] WKC/1 header
+- [x] parser
+- [x] writer
+- [x] HELLO
+- [x] HELLO_ACK
+- [x] PING/PONG
+- [x] tests
 
 ## M0.3 — H.264 encoder
 
-- [ ] MediaCodec AVC
-- [ ] encoder Surface
-- [ ] SPS/PPS extraction
-- [ ] keyframe detection
-- [ ] timestamps
+- [x] MediaCodec AVC
+- [x] encoder Surface
+- [x] SPS/PPS extraction
+- [x] keyframe detection
+- [x] timestamps
 
 ## M0.4 — Wi-Fi transport
 
-- [ ] Android TCP server
-- [ ] Windows TCP connection
-- [ ] VIDEO_CONFIG
-- [ ] VIDEO_FRAME
+- [x] Android TCP server
+- [x] Windows TCP connection
+- [x] VIDEO_CONFIG
+- [x] VIDEO_FRAME
 
 ## M0.5 — Windows preview
 
