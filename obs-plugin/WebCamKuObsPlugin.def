@@ -1,0 +1,7 @@
+LIBRARY "webcamku-obs"
+EXPORTS
+    obs_module_set_pointer
+    obs_module_ver
+    obs_module_load
+    obs_module_name
+    obs_module_description

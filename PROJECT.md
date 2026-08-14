@@ -975,7 +975,7 @@ Possible future strategies must be evaluated separately.
 
 # 18. USB Mode
 
-USB is milestone 0.4.
+USB is milestone M0.9.
 
 Do not invent a custom USB driver.
 
@@ -1515,7 +1515,28 @@ Do not require root.
 
 ---
 
-## M0.10 — 1080p
+## M0.10 — OBS Plugin + Android Camera UX
+
+Deliver:
+
+- native OBS source named `WebCamKu Source` with direct latest-frame ingestion;
+- development build/install scripts for the locally installed OBS version;
+- redesigned Android streaming screen with live preview while the server is active;
+- screen-dim control that keeps streaming alive;
+- continuous autofocus and tap/manual-focus controls with clean unsupported-state feedback.
+
+Acceptance:
+
+- OBS loads the plugin and receives live phone frames without using the Windows virtual camera;
+- closing/reopening the OBS source does not crash OBS or the Android stream;
+- Android preview remains visible while streaming and can be dimmed/restored;
+- autofocus and manual focus commands visibly update state and streaming continues.
+
+Do not begin 1080p until this gate passes.
+
+---
+
+## M0.11 — 1080p
 
 Deliver:
 
@@ -1533,7 +1554,7 @@ No regression to 720p stability.
 
 ---
 
-## M0.11 — Local Discovery
+## M0.12 — Local Discovery
 
 Deliver:
 
@@ -1547,7 +1568,7 @@ User can normally connect without typing an IP.
 
 ---
 
-## M0.12 — Audio
+## M0.13 — Audio
 
 Only start after video and virtual camera are stable.
 
@@ -2114,13 +2135,13 @@ Do **not** begin the virtual-camera milestone until all conditions are true:
 Do not begin USB/audio/advanced features until:
 
 ```text
-[ ] WebCamKu Camera registers
-[ ] WebCamKu Camera unregisters cleanly
-[ ] consuming application can open it
-[ ] phone frames appear in the virtual camera
-[ ] disconnect does not crash consumer
-[ ] reconnect resumes frames
-[ ] Windows client can restart cleanly
+[x] WebCamKu Camera registers
+[x] WebCamKu Camera unregisters cleanly
+[x] consuming application can open it
+[x] phone frames appear in the virtual camera
+[x] disconnect does not crash consumer
+[x] reconnect resumes frames
+[x] Windows client can restart cleanly
 ```
 
 ---
@@ -2168,42 +2189,52 @@ Do not begin USB/audio/advanced features until:
 
 ## M0.5 — Windows preview
 
-- [ ] Media Foundation decoder
-- [ ] frame output
-- [ ] WPF preview
-- [ ] FPS
-- [ ] bitrate
-- [ ] dropped frames
-- [ ] reconnect
+- [x] Media Foundation decoder
+- [x] frame output
+- [x] WPF preview
+- [x] FPS
+- [x] bitrate
+- [x] dropped frames
+- [x] reconnect
 
 ## M0.6 — Controls
 
-- [ ] switch camera
-- [ ] torch
-- [ ] zoom
+- [x] switch camera
+- [x] torch
+- [x] zoom
 
 ## M0.7 — Robustness
 
-- [ ] bounded queues
-- [ ] timeout
-- [ ] reconnect
-- [ ] recovery
-- [ ] 30-minute test
+- [x] bounded queues
+- [x] timeout
+- [x] reconnect
+- [x] recovery
+- [x] 30-minute test
 
 ## M0.8 — Windows 11 virtual camera
 
-- [ ] media source
-- [ ] MF virtual camera registration
-- [ ] shared frame provider
-- [ ] test consumer
-- [ ] install/uninstall flow
+- [x] media source
+- [x] MF virtual camera registration
+- [x] shared frame provider
+- [x] test consumer
+- [x] install/uninstall flow
 
 ## M0.9 — USB
 
-- [ ] detect ADB
-- [ ] detect phone
-- [ ] configure port forwarding
-- [ ] USB streaming
+- [x] detect ADB
+- [x] detect phone
+- [x] configure port forwarding
+- [x] USB streaming
+
+## M0.10 — OBS plugin + Android camera UX
+
+- [x] native OBS source plugin
+- [x] OBS development installer
+- [x] streaming camera preview
+- [x] screen dim control
+- [x] autofocus
+- [x] manual focus
+- [ ] physical OBS and Android acceptance
 
 ## Later
 

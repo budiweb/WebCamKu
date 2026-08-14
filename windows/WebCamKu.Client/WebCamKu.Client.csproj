@@ -5,10 +5,16 @@
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>WebCamKu.Client</AssemblyName>
     <RootNamespace>WebCamKu.Client</RootNamespace>
 </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\WebCamKu.Core\WebCamKu.Core.csproj" />
+    <InternalsVisibleTo Include="WebCamKu.Client.Tests" />
   </ItemGroup>
+  <Target Name="CopyNativeVideo" AfterTargets="Build">
+    <Copy SourceFiles="..\WebCamKu.Video\x64\$(Configuration)\WebCamKu.Video.dll" DestinationFolder="$(OutputPath)" />
+    <Copy SourceFiles="..\WebCamKu.VirtualCamera.Manager\x64\$(Configuration)\WebCamKu.VirtualCamera.Manager.exe" DestinationFolder="$(OutputPath)" />
+  </Target>
 </Project>

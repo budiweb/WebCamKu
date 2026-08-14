@@ -78,4 +78,19 @@ public sealed class WkcPacketTests
         Assert.Equal(uint.MaxValue, parsed.SequenceNumber);
         Assert.Equal(ulong.MaxValue, parsed.TimestampUs);
     }
+
+    [Fact]
+    public void CommandAndAcknowledgementUseCorrelatedJson()
+    {
+        var command = WkcMessages.Command("zoom-1", "zoom", 2.5, 12);
+        using var json = System.Text.Json.JsonDocument.Parse(command.Payload);
+        Assert.Equal("zoom-1", json.RootElement.GetProperty("commandId").GetString());
+        Assert.Equal(2.5, json.RootElement.GetProperty("value").GetDouble());
+
+        Assert.True(WkcMessages.TryReadCommandAcknowledgement(
+            "{\"commandId\":\"zoom-1\",\"success\":false,\"error\":\"unsupported\"}"u8,
+            out var acknowledgement));
+        Assert.Equal("unsupported", acknowledgement!.Error);
+        Assert.False(WkcMessages.TryReadCommandAcknowledgement("{\"success\":true}"u8, out _));
+    }
 }

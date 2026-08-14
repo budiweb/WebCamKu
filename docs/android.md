@@ -28,4 +28,30 @@ Use **Test H.264 Encoder** to replace the CameraX preview temporarily with the l
 
 ## Wi-Fi transport (M0.4)
 
-**Start Server** opens TCP port 4747 and waits for one Windows client. After HELLO/HELLO_ACK and STREAM_START, the server starts the 720p H.264 encoder and emits binary VIDEO_CONFIG, VIDEO_FRAME, and periodic STATS packets. The encoder-to-network queue is bounded to four outputs; when full, its oldest output is discarded so backlog cannot grow without limit. **Stop Wi-Fi Server** closes the listener, active socket, encoder, and camera session.
+**Start Server** opens TCP port 4747 and waits for one Windows client. After HELLO/HELLO_ACK and STREAM_START, the server starts the 720p H.264 encoder and emits binary VIDEO_CONFIG, VIDEO_FRAME, and periodic STATS packets. B-frames are disabled and the encoder-to-network queue retains only the newest pending output; a slow socket drops stale video instead of turning backlog into visible latency. **Stop Wi-Fi Server** closes the listener, active socket, encoder, and camera session.
+
+During streaming, Windows can send `switchCamera`, `torch`, and `zoom` commands. Camera
+switch preserves the encoder and rebinds its input surface to the other camera. Torch
+and digital zoom modify the active repeating Camera2 request. Unsupported controls and
+invalid values produce unsuccessful `COMMAND_ACK` responses without disconnecting.
+
+M0.7 lifecycle handling closes the server, socket, camera session, MediaCodec, and
+recovery executor when the activity stops. A runtime encoder or Camera2 failure triggers
+a single delayed pipeline restart while the stream remains requested; repeated callbacks
+cannot create concurrent restart loops.
+
+## Streaming camera controls (M0.10)
+
+Starting the server now opens one Camera2 session with both the MediaCodec surface and
+the on-screen SurfaceView as capture targets. The preview therefore remains live before
+and during a Windows connection without competing with the encoder for the camera.
+**Dim screen** lowers only the activity brightness and keeps the screen/capture session
+awake; **Restore screen** returns to system brightness. Continuous video autofocus is
+the default. Moving the Far/Near slider disables autofocus and applies the camera's
+supported lens-focus-distance range; unsupported fixed-focus cameras report a clean
+status error.
+
+The main screen is responsive rather than scroll-based. Landscape uses camera preview
+and controls side by side; portrait keeps a 16:9 preview above a compact control panel.
+The primary camera, encoder/server, dim, autofocus, manual-focus, status, and stop
+controls remain visible on screen in either orientation.

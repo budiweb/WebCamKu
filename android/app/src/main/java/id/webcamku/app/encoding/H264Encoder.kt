@@ -5,6 +5,7 @@ import android.media.MediaCodecInfo
 import android.media.MediaFormat
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Bundle
 import android.view.Surface
 
 data class EncodedFrame(
@@ -33,6 +34,10 @@ class H264Encoder(
             setInteger(MediaFormat.KEY_BIT_RATE, BIT_RATE)
             setInteger(MediaFormat.KEY_FRAME_RATE, FRAME_RATE)
             setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, I_FRAME_INTERVAL_SECONDS)
+            setInteger("max-bframes", 0)
+            setInteger("latency", 0)
+            setInteger(MediaFormat.KEY_PRIORITY, 0)
+            setInteger(MediaFormat.KEY_OPERATING_RATE, FRAME_RATE)
         }
         encoder.setCallback(object : MediaCodec.Callback() {
             override fun onInputBufferAvailable(codec: MediaCodec, index: Int) = Unit
@@ -86,6 +91,13 @@ class H264Encoder(
         runCatching { encoder.release() }
         callbackThread?.quitSafely()
         callbackThread = null
+    }
+
+    @Synchronized
+    fun requestKeyFrame() {
+        codec?.setParameters(Bundle().apply {
+            putInt(MediaCodec.PARAMETER_KEY_REQUEST_SYNC_FRAME, 0)
+        })
     }
 
     override fun close() = stop()

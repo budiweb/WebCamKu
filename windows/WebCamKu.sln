@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCamKu.Core", "WebCamKu.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCamKu.Core.Tests", "WebCamKu.Core.Tests\WebCamKu.Core.Tests.csproj", "{6C9A50D6-29D9-40DD-9731-27B64E80668B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCamKu.Client.Tests", "WebCamKu.Client.Tests\WebCamKu.Client.Tests.csproj", "{A017188A-148C-42BA-A9BE-8F7E7BBF25A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,5 +28,9 @@ Global
 		{6C9A50D6-29D9-40DD-9731-27B64E80668B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C9A50D6-29D9-40DD-9731-27B64E80668B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C9A50D6-29D9-40DD-9731-27B64E80668B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A017188A-148C-42BA-A9BE-8F7E7BBF25A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A017188A-148C-42BA-A9BE-8F7E7BBF25A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A017188A-148C-42BA-A9BE-8F7E7BBF25A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A017188A-148C-42BA-A9BE-8F7E7BBF25A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
