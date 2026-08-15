@@ -53,6 +53,8 @@ import id.webcamku.app.encoding.EncodedFrame
 import id.webcamku.app.encoding.EncoderCameraSession
 import id.webcamku.app.encoding.H264Encoder
 import id.webcamku.app.network.StreamingSession
+import java.net.Inet4Address
+import java.net.NetworkInterface
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,6 +134,11 @@ fun WebCamKuApp(cameraViewModel: CameraViewModel = viewModel()) {
                         isDimmed = isDimmed,
                         modifier = modifier,
                         onSwitchCamera = cameraViewModel::switchCamera,
+                        onSwitchStreamingCamera = {
+                            runCatching { streamingSession?.switchCamera() ?: error("Camera stream is not ready") }
+                                .onSuccess(cameraViewModel::onStreamingCameraSwitched)
+                                .onFailure { cameraViewModel.onServerStatus(it.message ?: "Could not switch camera") }
+                        },
                         onBeginEncoding = cameraViewModel::beginEncoding,
                         onStartServer = cameraViewModel::startServer,
                         onStopServer = { isDimmed = false; cameraViewModel.stopServer() },
@@ -175,6 +182,7 @@ private fun CameraControlPanel(
     isDimmed: Boolean,
     modifier: Modifier,
     onSwitchCamera: () -> Unit,
+    onSwitchStreamingCamera: () -> Unit,
     onBeginEncoding: () -> Unit,
     onStartServer: () -> Unit,
     onStopServer: () -> Unit,
@@ -184,14 +192,24 @@ private fun CameraControlPanel(
     onFocusChanged: (Float) -> Unit,
     onManualFocus: () -> Unit,
 ) {
+    val phoneIpAddress = remember(state.isServerRunning) {
+        if (state.isServerRunning) findLocalIpv4Address() else null
+    }
     Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(state.status, style = MaterialTheme.typography.titleSmall, maxLines = 2)
         Text("${state.facing.label} camera  •  1280×720 / 30 FPS", style = MaterialTheme.typography.bodySmall)
         when {
             state.isServerRunning -> {
-                Text("Port 4747  •  ${state.streamedFrames} frames  •  ${state.droppedFrames} dropped", style = MaterialTheme.typography.bodySmall)
+                Text(
+                    phoneIpAddress?.let { "Phone IP: $it  •  Port 4747" }
+                        ?: "Phone IP unavailable  •  Port 4747",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Button(onClick = onSwitchStreamingCamera, modifier = Modifier.fillMaxWidth()) {
+                            Text("Switch Camera")
+                        }
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Button(onClick = onAutoFocus, modifier = Modifier.weight(1f)) { Text("Auto Focus") }
                             OutlinedButton(onClick = onToggleDim, modifier = Modifier.weight(1f)) {
@@ -231,6 +249,16 @@ private fun CameraControlPanel(
         }
     }
 }
+
+private fun findLocalIpv4Address(): String? = runCatching {
+    NetworkInterface.getNetworkInterfaces().toList()
+        .filter { it.isUp && !it.isLoopback }
+        .sortedByDescending { it.name.equals("wlan0", ignoreCase = true) }
+        .flatMap { it.inetAddresses.toList() }
+        .filterIsInstance<Inet4Address>()
+        .firstOrNull { !it.isLoopbackAddress && it.isSiteLocalAddress }
+        ?.hostAddress
+}.getOrNull()
 
 @Composable
 private fun ServerSession(viewModel: CameraViewModel, previewSurface: Surface, onSessionChanged: (StreamingSession?) -> Unit) {

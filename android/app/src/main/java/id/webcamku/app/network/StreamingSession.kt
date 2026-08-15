@@ -46,6 +46,9 @@ class StreamingSession(
     fun setManualFocus(distance: Float) = cameraSession?.setManualFocus(distance)
         ?: error("Camera stream is not ready")
 
+    fun switchCamera(): String = cameraSession?.switchCamera()
+        ?: error("Camera stream is not ready")
+
     @Synchronized
     private fun startEncoder(onStatus: (String) -> Unit) {
         if (cameraSession != null) return

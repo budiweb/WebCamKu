@@ -41,6 +41,15 @@ class CameraViewModel : ViewModel() {
         }
     }
 
+    fun onStreamingCameraSwitched(facing: String) {
+        mutableState.update {
+            it.copy(
+                facing = if (facing.equals("front", ignoreCase = true)) CameraFacing.Front else CameraFacing.Back,
+                status = "Streaming 1280×720 H.264",
+            )
+        }
+    }
+
     fun onCameraReady() {
         mutableState.update { it.copy(status = "Preview active", isReady = true) }
     }
